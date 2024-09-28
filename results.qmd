@@ -1,0 +1,67 @@
+---
+title: "Results"
+format: dashboard
+theme: 
+  light: zephyr
+  dark: slate
+logo: logo.png
+---
+
+```{r}
+#| label: setup
+
+# Use 'quarto publish results.qmd' in the terminal to update it
+library(tidyverse)
+library(gt)
+library(readxl)
+data <- read_excel(paste0(getwd(), "/data.xlsx")) # update this to read all races
+extract_time <- function(time) {
+  time %>% 
+    str_extract("[0-9]{2}:[0-9]{2}:[0-9]{2}") %>% 
+    hms() %>% 
+    return()
+}
+data <- data %>% 
+  mutate(
+    start_time = extract_time(start_time),
+    finish_time = extract_time(finish_time),
+    elapsed_time = finish_time - start_time
+  )
+calc_race_places <- function(data, type = "scratch") {
+  if (type == "scratch") {
+    data %>% 
+      mutate(place = rank(elapsed_time)) %>% 
+      arrange(place) %>% 
+      return()
+  } else if (type == "handicap") {
+    data %>% 
+      mutate(place = rank(handicap_time)) %>% 
+      arrange(place) %>% 
+      return()
+  } else {
+    print("Incorrect place scoring type.")
+  }
+}
+```
+
+# Manly Juniors
+
+Content only on skiffs tab at the moment
+
+# Flying Eleven
+
+Content only on skiffs tab at the moment
+
+# 125
+
+Content only on skiffs tab at the moment
+
+# Skiffs
+
+```{r}
+#| label: skiff-results
+#| title: "Skiff results"
+
+data %>% 
+  filter(class=="skiff")
+```

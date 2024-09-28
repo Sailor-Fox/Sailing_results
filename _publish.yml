@@ -1,0 +1,4 @@
+- source: results.qmd
+  quarto-pub:
+    - id: e5192808-111d-4431-9704-06e6f60c7040
+      url: 'https://vall.quarto.pub/results'
